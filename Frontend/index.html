@@ -1,0 +1,40 @@
+<%@ Page Language="VB" AutoEventWireup="true" CodeFile="ManageColors.aspx.vb" Inherits="ManageColors" %>
+
+<html>
+<head>
+    <title>Colors Table</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./index.js"></script>
+</head>
+<body>
+    <h1>Colors Table</h1>
+    <div>
+        <label>Color Name:</label>
+        <input type="text" id="Name" />
+		<label>Color Display Order:</label>
+        <input type="text" id="DisplayOrder" />
+        <label>Color Price:</label>
+        <input type="text" id="Price" />
+        <label>Color In Stock:</label>
+        <input type="checkbox" id="InStock" />
+        <button id="btnAdd">Add Color</button>
+		<button id="btnUpdate">Update Color</button>
+    </div>
+    <table id="colorTable" >
+        <thead>
+            <tr>
+                <th>Color Name</th>
+				<th>Color Display Order</th>
+                <th>Color Price</th>
+                <th>Color In Stock</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+
