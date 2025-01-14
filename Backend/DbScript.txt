@@ -1,0 +1,9 @@
+//create Colors table
+
+CREATE TABLE Colors (
+    ColorID int PRIMARY KEY,
+    ColorName varchar(30) NOT NULL,
+	ColorDisplayOrder int NOT NULL,
+    ColorPrice decimal(8,2) NOT NULL,
+    ColorStock BIT NOT NULL
+);

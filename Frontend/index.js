@@ -4,7 +4,7 @@ $(document).ready(function () {
      // Load colors
     function loadColors() {
         $.ajax({
-            url: 'ManageColors.aspx/GetColors',
+            url: 'ManageColors.vb/GetColors',
             method: 'POST',
             contentType: 'application/json',
             success: function (response) {
@@ -18,7 +18,7 @@ $(document).ready(function () {
                         <td>${item.ColorPrice}</td>
                         <td>${item.ColorInStock ? "V" : "X"}</td>
                         <td>
-                            <button onclick="initFields('${item.ColorName}', ${item.ColorPrice}, ${item.ColorDisplayOrder}, ${item.ColorInStock})">+</button>
+                            <button onclick="initFields('${item.ColorName}', ${item.ColorDisplayOrder}, ${item.ColorPrice}, ${item.ColorInStock})">Edit</button>
                             <button onclick="deleteColor(${item.ColorID})">Delete</button>
                         </td>
                     </tr>`;
@@ -26,8 +26,27 @@ $(document).ready(function () {
                 });
             }
         });
+        // Make rows sortable
+        $("#colorTable tbody").sortable({
+            update: function () {
+                var order = [];
+                $("#colorTable tbody tr").each(function (index) {
+                    order.push({
+                        ColorID: $(this).attr("id"),
+                        DisplayOrder: index + 1
+                    });
+                }); 
+            $.ajax({
+                    url: 'ManageColors.aspx/UpdateOrder',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ order: order }),
+                    success: function (){
+                        loadColors();
+                    }
+            });
+        }});
     }
-
 
     // Add color
     $("#btnAdd").click(function () {
@@ -38,7 +57,7 @@ $(document).ready(function () {
             ColorInStock: $("#InStock").is(":checked")
         };
         $.ajax({
-            url: 'ManageColors.aspx/AddColor',
+            url: 'ManageColors.vb/AddColor',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ color: color }),
@@ -49,11 +68,10 @@ $(document).ready(function () {
         });
     });
 
-
     // Delete color
     window.deleteColor = function (id) {
         $.ajax({
-            url: 'ManageColors.aspx/DeleteColor',
+            url: 'ManageColors.vb/DeleteColor',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ id: id }),
@@ -62,8 +80,7 @@ $(document).ready(function () {
             }
         });
     };
-            
-            
+                  
      // Update color
     $("#btnUpdate").click(function () {
         var color = {
@@ -74,7 +91,7 @@ $(document).ready(function () {
             InStock: $("#ColorInStock").is(":checked")
         };
         $.ajax({
-            url: 'ManageColors.aspx/UpdateColor',
+            url: 'ManageColors.vb/UpdateColor',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ color: color }),
@@ -83,18 +100,15 @@ $(document).ready(function () {
                 resetFields();
             }
         });
-    });
-    
-    
-  
+    }); 
+   
     // initial fields on screen with chosen color
-    window.initFields = function (name, price, order, stock) {
+    window.initFields = function (name, order, price, stock) {
         $("#Name").val(name);
         $("#DisplayOrder").val(price);
         $("#Price").val(order);
         $("#InStock").prop('checked', stock);
     };
-    
     
     //reset fields on screen
     function resetFields() {
@@ -103,4 +117,5 @@ $(document).ready(function () {
         $("#Price").val('');
         $("#InStock").prop('checked', false);
     }
+
 });
